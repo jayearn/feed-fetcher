@@ -1,0 +1,14 @@
+{
+  "name": "feed-fetcher",
+  "version": "0.0.1",
+  "description": "Script for fetching a feed",
+  "keywords": [
+    "rss",
+    "atom"
+  ],
+  "repository": "https://github.com/jayearn/node-feed-fetcher.git",
+  "author": "Jörn Ahrens<joern.ahrens@gmail.com>",
+  "dependencies": {
+    "node-feedparser": "1.0.1"
+  }
+}
