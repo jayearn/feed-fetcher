@@ -30,6 +30,8 @@ feedparser.on('readable', function() {
     console.log('Link: ' + item.link);
 //    console.log('Summary: ' + item.summary);
     console.log('GUID: ' + item.guid);
+    console.log('image: ' + item.image.title);
+    console.log('image: ' + item.image.url);
     console.log('date: ' + item.date);
     console.log('pubdate: ' + item.pubdate);
     console.log();
