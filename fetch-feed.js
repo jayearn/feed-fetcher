@@ -1,5 +1,5 @@
 var PropertiesReader = require('properties-reader');
-var properties = PropertiesReader('local.properties');
+var properties = PropertiesReader('./local.properties');
 
 var FeedParser = require('feedparser')
   , request = require('request');
