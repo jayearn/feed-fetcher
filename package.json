@@ -1,5 +1,5 @@
 {
-  "name": "feed-fetcher",
+  "name": "node-feed-fetcher",
   "version": "0.0.1",
   "description": "Script for fetching a feed and writing the results to a MySQL database",
   "keywords": [
