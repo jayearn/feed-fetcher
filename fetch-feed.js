@@ -48,7 +48,7 @@ feedparser.on('readable', function() {
     var sql = "REPLACE INTO feed_item (`guid`, title, summary, image_url, `date`, pubdate) VALUES " +
         "(?, ?, ?, ?, ?, ?);";
     var inserts = [
-        item.guid == null ? item.link : item.guid,
+        item.guid == null ? sha1(item.link) : item.guid,
         item.title,
         item.summary,
         item.image_url,
@@ -57,10 +57,11 @@ feedparser.on('readable', function() {
     ];
     sql = mysql.format(sql, inserts);
 
+console.log('writing item ' + item.link);
     connection.query(sql, function(err, results) {
       if (err) throw err;
 
-      console.log("results: " + results);
+//      console.log("wrote " + results.toString());
     });
 
 //    console.log('Title: ' + item.title);
