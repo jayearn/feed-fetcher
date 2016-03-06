@@ -45,12 +45,13 @@ feedparser.on('readable', function() {
     , item;
 
   while (item = stream.read()) {
-    var sql = "REPLACE INTO feed_item (`guid`, title, summary, image_url, `date`, pubdate) VALUES " +
-        "(?, ?, ?, ?, ?, ?);";
+    var sql = "REPLACE INTO feed_item (`guid`, title, summary, link, image_url, `date`, pubdate) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?);";
     var inserts = [
-        item.guid == null ? sha1(item.link) : item.guid,
+        item.guid == null ? sha1(item.link) : sha1(item.guid),
         item.title,
         item.summary,
+        item.link,
         item.image_url,
         item.date,
         item.pubdate
