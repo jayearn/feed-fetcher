@@ -2,3 +2,5 @@ dump
 .idea/
 node_modules/
 .log
+local.properties
+

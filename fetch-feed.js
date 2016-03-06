@@ -1,9 +1,22 @@
+var PropertiesReader = require('properties-reader');
+var properties = PropertiesReader('local.properties');
+
 var FeedParser = require('feedparser')
   , request = require('request');
 
 var req = request(process.argv[2])
   , feedparser = new FeedParser();
 
+var mysql      = require('mysql'),
+var connection = mysql.createConnection({
+  host     : properties.get('db.host'),
+  user     : properties.get('db.user'),
+  password : properties.get('db.password'),
+  database : properties.get('db.database')'
+});
+
+
+// ------------------ Perform HTTP request -------------------
 req.on('error', function (error) {
   // handle any request errors
 });
@@ -16,6 +29,7 @@ req.on('response', function (res) {
 });
 
 
+// ------------------ Parse Newsfeed -------------------
 feedparser.on('error', function(error) {
   // always handle errors
 });

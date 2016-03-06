@@ -1,0 +1,4 @@
+db.host=localhost
+db.user=notroot
+db.password=not123456
+db.database=feeds
