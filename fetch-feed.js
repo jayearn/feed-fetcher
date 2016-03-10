@@ -4,6 +4,8 @@ var properties = PropertiesReader('./local.properties');
 var FeedParser = require('feedparser')
   , request = require('request');
 
+var iconv = require('iconv-lite');
+
 var req = request(process.argv[2])
   , feedparser = new FeedParser();
 
@@ -25,11 +27,12 @@ req.on('error', function (error) {
   connection.end();
 });
 req.on('response', function (res) {
-  var stream = this;
-
   if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
 
-  stream.pipe(feedparser);
+  var charset = getParams(res.headers['content-type'] || '').charset;
+  res = maybeTranslate(res, charset);
+
+  res.pipe(feedparser);
 });
 
 
@@ -81,3 +84,39 @@ feedparser.on('end', function() {
     console.log('cleaning up MySQL connection');
 });
 
+
+function maybeTranslate (res, charset) {
+  console.log('maybeTranslate with charset: ' + charset);
+
+  // Use iconv-lite if its not utf8 already.
+  if (charset && !/utf-*8/i.test(charset)) {
+    try {
+      console.log('Converting from charset %s to utf-8', charset);
+      res =
+        res
+          .pipe(iconv.decodeStream(charset))
+          .pipe(iconv.encodeStream('utf-8'));
+
+//      iconv = new Iconv(charset, 'utf-8');
+//      iconv.on('error', done);
+//      // If we're using iconv, stream will be the output of iconv
+//      // otherwise it will remain the output of request
+//      res = res.pipe(iconv);
+    } catch(err) {
+      console.log(err);
+      res.emit('error', err);
+    }
+  }
+  return res;
+}
+
+function getParams(str) {
+  var params = str.split(';').reduce(function (params, param) {
+    var parts = param.split('=').map(function (part) { return part.trim(); });
+    if (parts.length === 2) {
+      params[parts[0]] = parts[1];
+    }
+    return params;
+  }, {});
+  return params;
+}
