@@ -38,7 +38,6 @@ req.on('response', function (res) {
 
 // ------------------ Parse Newsfeed -------------------
 feedparser.on('error', function(error) {
-  // always handle errors
   connection.end();
 });
 feedparser.on('readable', function() {
@@ -56,6 +55,7 @@ feedparser.on('readable', function() {
         item.summary,
         item.link,
         item.image_url,
+        // TODO Fill dates if undefined
         item.date,
         item.pubdate
     ];
@@ -64,19 +64,7 @@ feedparser.on('readable', function() {
 console.log('writing item ' + item.link);
     connection.query(sql, function(err, results) {
       if (err) throw err;
-
-//      console.log("wrote " + results.toString());
     });
-
-//    console.log('Title: ' + item.title);
-//    console.log('Link: ' + item.link);
-//    console.log('Summary: ' + item.summary);
-//    console.log('GUID: ' + item.guid);
-//    console.log('image: ' + item.image.title);
-//    console.log('image: ' + item.image.url);
-//    console.log('date: ' + item.date);
-//    console.log('pubdate: ' + item.pubdate);
-//    console.log();
   }
 });
 feedparser.on('end', function() {
@@ -86,8 +74,6 @@ feedparser.on('end', function() {
 
 
 function maybeTranslate (res, charset) {
-  console.log('maybeTranslate with charset: ' + charset);
-
   // Use iconv-lite if its not utf8 already.
   if (charset && !/utf-*8/i.test(charset)) {
     try {
@@ -97,11 +83,6 @@ function maybeTranslate (res, charset) {
           .pipe(iconv.decodeStream(charset))
           .pipe(iconv.encodeStream('utf-8'));
 
-//      iconv = new Iconv(charset, 'utf-8');
-//      iconv.on('error', done);
-//      // If we're using iconv, stream will be the output of iconv
-//      // otherwise it will remain the output of request
-//      res = res.pipe(iconv);
     } catch(err) {
       console.log(err);
       res.emit('error', err);
