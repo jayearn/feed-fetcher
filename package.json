@@ -9,7 +9,7 @@
   "repository": "https://github.com/jayearn/node-feed-fetcher.git",
   "author": "Jörn Ahrens<joern.ahrens@gmail.com>",
   "dependencies": {
-    "feedparser": "1.1.*",
+    "feedparser": "1.1.4",
     "mysql": "2.10.*",
     "properties-reader": "0.0.15",
     "sha1": "1.1.*",

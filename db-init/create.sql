@@ -13,8 +13,8 @@ CREATE TABLE feed_item (
     summary VARCHAR(4096),
     link VARCHAR(2048),
     image_url VARCHAR(1024),
-    `date` VARCHAR(128),
-    pubdate VARCHAR(128)
+    `date` DATETIME,
+    pubdate DATETIME
 
 ) ENGINE InnoDB;
 

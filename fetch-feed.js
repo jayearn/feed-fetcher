@@ -55,9 +55,8 @@ feedparser.on('readable', function() {
         item.summary,
         item.link,
         item.image_url,
-        // TODO Fill dates if undefined
-        item.date,
-        item.pubdate
+        getValidDate(item.date),
+        getValidDate(item.pubdate)
     ];
     sql = mysql.format(sql, inserts);
 
@@ -72,6 +71,14 @@ feedparser.on('end', function() {
     console.log('cleaning up MySQL connection');
 });
 
+function getValidDate(input) {
+    var dateInput = new Date(input);
+    if (dateInput.getTime() === dateInput.getTime()) {
+        return dateInput;
+    } else {
+        return new Date();
+    }
+}
 
 function maybeTranslate (res, charset) {
   // Use iconv-lite if its not utf8 already.
