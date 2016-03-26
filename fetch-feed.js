@@ -47,8 +47,9 @@ feedparser.on('readable', function() {
     , item;
 
   while (item = stream.read()) {
-    var sql = "REPLACE INTO feed_item (`guid`, title, summary, link, image_url, `date`, pubdate) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?);";
+    var sql = "INSERT INTO feed_item (`guid`, title, summary, link, image_url, `date`, pubdate) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?) " +
+        "ON DUPLICATE KEY UPDATE title = ?, summary = ?, link = ?, image_url = ?;";
     var inserts = [
         item.guid == null ? sha1(item.link) : sha1(item.guid),
         item.title,
@@ -56,7 +57,11 @@ feedparser.on('readable', function() {
         item.link,
         item.image_url,
         getValidDate(item.date),
-        getValidDate(item.pubdate)
+        getValidDate(item.pubdate),
+        item.title,
+        item.summary,
+        item.link,
+        item.image_url
     ];
     sql = mysql.format(sql, inserts);
 
